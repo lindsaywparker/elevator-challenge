@@ -44,7 +44,8 @@ describe('Elevator', function() {
 
   it('should bring a rider to a floor above their current floor', () => {
     let mockUser = { name: "Brittany", currentFloor: 2, dropOffFloor: 5 };
-    elevator.goToFloor(mockUser);
+    elevator.request(mockUser);
+    elevator.goToFloor();
 
     assert.equal(elevator.currentFloor, 5);
     assert.equal(elevator.stopCount, 2);
@@ -53,10 +54,25 @@ describe('Elevator', function() {
 
   it('should bring a rider to a floor below their current floor', () => {
     let mockUser = { name: "Brittany", currentFloor: 8, dropOffFloor: 3 };
-    elevator.goToFloor(mockUser);
+    elevator.request(mockUser);
+    elevator.goToFloor();
 
     assert.equal(elevator.currentFloor, 3);
     assert.equal(elevator.stopCount, 2);
     assert.equal(elevator.floorsTraversed, 13);
+  });
+  
+  it('should pick up and drop off riders in the order of the requests', () => {
+    let mockUser1 = { name: "Bob", currentFloor: 3, dropOffFloor: 9 };
+    let mockUser2 = { name: "Sue", currentFloor: 6, dropOffFloor: 2 };
+    
+    elevator.request(mockUser1);
+    elevator.request(mockUser2);
+
+    elevator.goToFloor();
+
+    assert.equal(elevator.currentFloor, 2);
+    assert.equal(elevator.stopCount, 4);
+    assert.equal(elevator.floorsTraversed, 16);
   });
 });

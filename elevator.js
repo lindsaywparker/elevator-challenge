@@ -16,19 +16,23 @@ export default class Elevator {
     this.floorsTraversed = 0;
   }
   
-  goToFloor(user) {
-    this.floorsTraversed = this.floorsTraversed + Math.abs(user.currentFloor - this.currentFloor);
-    this.currentFloor = user.currentFloor;
-    this.stopCount++;
-    console.log('Pick up:', this.currentFloor);
-    
+  request(user) {
     this.riders.push(user);
-    console.log('Riders:', this.riders);
-    
-    this.floorsTraversed = this.floorsTraversed + Math.abs(user.dropOffFloor - this.currentFloor);
-    this.currentFloor = user.dropOffFloor;
-    this.stopCount++;
-    console.log('Drop off:', this.currentFloor);
+  }
+  
+  goToFloor() {
+    while (this.riders.length) {
+      this.floorsTraversed += Math.abs(this.riders[0].currentFloor - this.currentFloor);
+      this.currentFloor = this.riders[0].currentFloor;
+      this.stopCount++;
+      console.log('Pick up  :', this.currentFloor, this.riders[0].name);
+      
+      this.floorsTraversed = this.floorsTraversed + Math.abs(this.riders[0].dropOffFloor - this.currentFloor);
+      this.currentFloor = this.riders[0].dropOffFloor;
+      this.stopCount++;
+      console.log('Drop off :', this.currentFloor, this.riders[0].name);
+      this.riders.shift();
+    }
   }
 }
 
