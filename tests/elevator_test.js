@@ -4,9 +4,21 @@ require('babel-core/register')({
 
 const assert = require('chai').assert;
 const Elevator = require('../elevator').default;
+const Person = require('../person').default;
+
+describe('Person', function() {
+  let person = new Person({ name: "Brittany", currentFloor: 2, dropOffFloor: 5 });
+  
+  it('should have initial properties', () => {
+    assert.equal(person.name, 'Brittany');
+    assert.equal(person.currentFloor, 2);
+    assert.equal(person.dropOffFloor, 5);
+  });
+});
 
 describe('Elevator', function() {
   let elevator = new Elevator();
+  let mockUser = new Person({ name: "Brittany", currentFloor: 2, dropOffFloor: 5 });
   let hour = 17;
 
   beforeEach(function() {
@@ -44,7 +56,6 @@ describe('Elevator', function() {
   });
   
   it('should allow people to make a request', () => {
-    let mockUser = { name: "Brittany", currentFloor: 2, dropOffFloor: 5 };
     elevator.request(mockUser);
     
     assert.equal(elevator.riders.length, 1);
@@ -54,7 +65,6 @@ describe('Elevator', function() {
   })
 
   it('should bring a rider to a floor above their current floor', () => {
-    let mockUser = { name: "Brittany", currentFloor: 2, dropOffFloor: 5 };
     elevator.request(mockUser);
     elevator.goToFloor(hour);
 
@@ -64,7 +74,7 @@ describe('Elevator', function() {
   });
 
   it('should bring a rider to a floor below their current floor', () => {
-    let mockUser = { name: "Brittany", currentFloor: 8, dropOffFloor: 3 };
+    mockUser = new Person({ name: "Brittany", currentFloor: 8, dropOffFloor: 3 });
     elevator.request(mockUser);
     elevator.goToFloor(hour);
 
@@ -74,8 +84,8 @@ describe('Elevator', function() {
   });
   
   it('should pick up and drop off riders when Person A goes up, Person B goes up', () => {
-    let mockUser1 = { name: "Bob", currentFloor: 3, dropOffFloor: 9 };
-    let mockUser2 = { name: "Sue", currentFloor: 1, dropOffFloor: 2 };
+    let mockUser1 = new Person({ name: "Bob", currentFloor: 3, dropOffFloor: 9 });
+    let mockUser2 = new Person({ name: "Sue", currentFloor: 1, dropOffFloor: 2 });
     
     assert.equal(elevator.riders.length, 0);
     
@@ -94,8 +104,8 @@ describe('Elevator', function() {
   });
   
   it('should pick up and drop off riders when Person A goes up, Person B goes down', () => {
-    let mockUser1 = { name: "Bob", currentFloor: 3, dropOffFloor: 9 };
-    let mockUser2 = { name: "Sue", currentFloor: 6, dropOffFloor: 2 };
+    mockUser1 = new Person({ name: "Bob", currentFloor: 3, dropOffFloor: 9 });
+    mockUser2 = new Person({ name: "Sue", currentFloor: 6, dropOffFloor: 2 });
     
     assert.equal(elevator.riders.length, 0);
     
@@ -114,8 +124,8 @@ describe('Elevator', function() {
   });
   
   it('should pick up and drop off riders when Person A goes down, Person B goes up', () => {
-    let mockUser1 = { name: "Bob", currentFloor: 6, dropOffFloor: 2 };
-    let mockUser2 = { name: "Sue", currentFloor: 1, dropOffFloor: 9 };
+    mockUser1 = new Person({ name: "Bob", currentFloor: 6, dropOffFloor: 2 });
+    mockUser2 = new Person({ name: "Sue", currentFloor: 1, dropOffFloor: 9 });
     
     assert.equal(elevator.riders.length, 0);
     
@@ -134,8 +144,8 @@ describe('Elevator', function() {
   });
   
   it('should pick up and drop off riders when Person A goes down, Person B goes down', () => {
-    let mockUser1 = { name: "Bob", currentFloor: 6, dropOffFloor: 2 };
-    let mockUser2 = { name: "Sue", currentFloor: 9, dropOffFloor: 1 };
+    mockUser1 = new Person({ name: "Bob", currentFloor: 6, dropOffFloor: 2 });
+    mockUser2 = new Person({ name: "Sue", currentFloor: 9, dropOffFloor: 1 });
     
     assert.equal(elevator.riders.length, 0);
     
@@ -154,7 +164,7 @@ describe('Elevator', function() {
   });
   
   it('should return to floor 0 when empty if it\'s before 12pm', () => {
-    let mockUser1 = { name: "Bob", currentFloor: 6, dropOffFloor: 2 };
+    mockUser1 = new Person({ name: "Bob", currentFloor: 6, dropOffFloor: 2 });
     hour = 9;
     
     elevator.request(mockUser1);
