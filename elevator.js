@@ -20,7 +20,7 @@ export default class Elevator {
     this.riders.push(user);
   }
   
-  goToFloor() {
+  goToFloor(hour = (new Date()).getHours()) {
     while (this.riders.length) {
       this.floorsTraversed += Math.abs(this.riders[0].currentFloor - this.currentFloor);
       this.currentFloor = this.riders[0].currentFloor;
@@ -32,6 +32,13 @@ export default class Elevator {
       this.stopCount++;
       console.log('Drop off :', this.currentFloor, this.riders[0].name);
       this.riders.shift();
+    }
+    
+    if (hour < 12) {
+      this.floorsTraversed += this.currentFloor;
+      this.currentFloor = 0;
+      this.stopCount++;
+      console.log('Return   :', this.currentFloor);
     }
   }
 }
